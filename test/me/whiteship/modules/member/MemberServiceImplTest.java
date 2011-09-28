@@ -69,7 +69,7 @@ public class MemberServiceImplTest {
 	}
 
     @Test(expected = LazyInitializationException.class)
-    public void objectGraph(){
+    public void lazyInitializationException(){
         Member me = new Member();
         me.setName("ks");
         Member wife = new Member();
