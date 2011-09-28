@@ -12,4 +12,5 @@ public interface MemberService {
 	
 	public void remove(String name);
 
+    void addMember(Member member);
 }

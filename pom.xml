@@ -122,14 +122,14 @@
 			<artifactId>querydsl-jpa</artifactId>
 			<version>2.1.2</version>
 		</dependency>
-
 		<!-- EHCache -->
-		<dependency>
-			<groupId>com.googlecode.ehcache-spring-annotations</groupId>
-			<artifactId>ehcache-spring-annotations</artifactId>
-			<version>1.2.0-M1</version>
-		</dependency>
-
+        <dependency>
+            <groupId>net.sf.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+            <version>2.4.4</version>
+            <type>pom</type>
+        </dependency>
+        <!-- Pool -->
 		<dependency>
 			<groupId>c3p0</groupId>
 			<artifactId>c3p0</artifactId>

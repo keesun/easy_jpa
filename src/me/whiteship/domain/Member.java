@@ -1,9 +1,8 @@
 package me.whiteship.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -14,6 +13,14 @@ public class Member {
 	private Integer id;
 
 	private String name;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Member> familly;
+
+    public Member() {
+        this.familly = new ArrayList<Member>();
+
+    }
 
 	public Integer getId() {
 		return id;
@@ -31,4 +38,15 @@ public class Member {
 		this.name = name;
 	}
 
+    public List<Member> getFamilly() {
+        return familly;
+    }
+
+    public void setFamilly(List<Member> familly) {
+        this.familly = familly;
+    }
+
+    public void addFamilly(Member member) {
+        this.getFamilly().add(member);
+    }
 }
