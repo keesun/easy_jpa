@@ -32,6 +32,7 @@ public class MemberServiceImpl implements MemberService {
 
 	@Cacheable("member")
 	public Member getAMember(Integer id) {
+        System.out.println("called!");
 		return repository.findOne(id);
 	}
 
@@ -53,6 +54,13 @@ public class MemberServiceImpl implements MemberService {
 
     public void addMember(Member member) {
         repository.save(member);
+    }
+
+    public Member nonCachingMember(int i){
+        Member member = new Member();
+        member.setId(i);
+        member.setName("ks");
+        return member;
     }
 
 }

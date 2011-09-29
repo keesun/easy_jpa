@@ -13,4 +13,6 @@ public interface MemberService {
 	public void remove(String name);
 
     void addMember(Member member);
+
+    public Member nonCachingMember(int i);
 }
