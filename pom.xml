@@ -6,6 +6,10 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 
+    <properties>
+        <spring.version>3.1.0.M2</spring.version>
+    </properties>
+
 
 	<dependencies>
         <!-- Servlet -->
@@ -24,47 +28,47 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
-			<version>3.1.0.M2</version>
+			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
-			<version>3.1.0.M2</version>
+			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-aspects</artifactId>
-			<version>3.1.0.M2</version>
+			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-aop</artifactId>
-			<version>3.1.0.M2</version>
+			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-beans</artifactId>
-			<version>3.1.0.M2</version>
+			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-			<version>3.1.0.M2</version>
+			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
-			<version>3.1.0.M2</version>
+			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-tx</artifactId>
-			<version>3.1.0.M2</version>
+			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-orm</artifactId>
-			<version>3.1.0.M2</version>
+			<version>${spring.version}</version>
 		</dependency>
 		<!-- Hiberate: https://repository.jboss.org/nexus -->
 		<dependency>
@@ -128,6 +132,12 @@
             <artifactId>ehcache</artifactId>
             <version>2.4.4</version>
             <type>pom</type>
+            <exclusions>
+                <exclusion>
+                    <artifactId>ehcache-terracotta</artifactId>
+                    <groupId>net.sf.ehcache</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <!-- Pool -->
 		<dependency>
@@ -140,6 +150,12 @@
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
             <version>1.6.9</version>
+        </dependency>
+        <!-- DBUnit -->
+        <dependency>
+            <groupId>org.dbunit</groupId>
+            <artifactId>dbunit</artifactId>
+            <version>2.4.8</version>
         </dependency>
 	</dependencies>
 
@@ -208,6 +224,35 @@
 					</execution>
 				</executions>
 			</plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <tasks>
+                        <taskdef name="instrument"
+                            classname="org.hibernate.tool.instrument.javassist.InstrumentTask">
+                            <classpath>
+                                <path refid="maven.runtime.classpath" />
+                                <path refid="maven.plugin.classpath" />
+                            </classpath>
+                        </taskdef>
+                        <instrument verbose="false">
+                            <fileset dir="${project.build.outputDirectory}">
+                                <include name="**/domain/*.class" />
+                            </fileset>
+                        </instrument>
+                    </tasks>
+                </configuration>
+            </plugin>
 		</plugins>
 	</build>
 
