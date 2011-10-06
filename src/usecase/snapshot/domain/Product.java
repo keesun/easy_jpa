@@ -17,10 +17,12 @@ public class Product {
 
     private String name;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, optional = true, mappedBy = "product")
+    @LazyToOne(LazyToOneOption.NO_PROXY)
     private ProductDetails productDetails;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, optional = true, mappedBy = "product")
+    @LazyToOne(LazyToOneOption.NO_PROXY)
     private ProductInfo productInfo;
 
     public Long getId() {

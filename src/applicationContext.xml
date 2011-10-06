@@ -58,6 +58,7 @@
 				<prop key="hibernate.show_sql">true</prop>
 				<prop key="hibernate.format_sql">true</prop>
 				<prop key="hibernate.generate_statistics">true</prop>
+                <prop key="hibernate.bytecode.provider">cglib</prop>
 			</props>
 		</property>
 	</bean>
