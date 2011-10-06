@@ -247,7 +247,7 @@
                         </taskdef>
                         <instrument verbose="false">
                             <fileset dir="${project.build.outputDirectory}">
-                                <include name="**/domain/*.class" />
+                                <include name="/usecase/snapshot/domain/*.class" />
                             </fileset>
                         </instrument>
                     </tasks>

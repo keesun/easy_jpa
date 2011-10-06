@@ -17,10 +17,10 @@ public class Product {
 
     private String name;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = true, mappedBy = "product")
+    @OneToOne(fetch = FetchType.LAZY)
     private ProductDetails productDetails;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = true, mappedBy = "product")
+    @OneToOne(fetch = FetchType.LAZY)
     private ProductInfo productInfo;
 
     public Long getId() {
