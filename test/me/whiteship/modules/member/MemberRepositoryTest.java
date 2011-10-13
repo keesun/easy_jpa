@@ -8,10 +8,14 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
+import me.whiteship.common.jpa.comment.domain.QueryComment;
+import me.whiteship.common.jpa.comment.domain.QueryHint;
+import me.whiteship.common.jpa.comment.service.QueryCommentService;
 import me.whiteship.domain.Member;
 import me.whiteship.domain.QMember;
 import me.whiteship.qeury.MemberQeuryContainer;
 
+import org.hibernate.SessionFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,12 +32,29 @@ public class MemberRepositoryTest {
 	@Autowired MemberRepository repository;
 	@Autowired MemberQeuryContainer mqc;
 	@Autowired EntityManagerFactory entityManagerFactory;
+    @Autowired SessionFactory sessionFactory;
+    @Autowired QueryCommentService queryCommentService;
 	
 	@Before
 	public void setUp(){
 		repository.deleteAll();
 	}
-	
+
+    @Test
+    public void queryHint(){
+        //GIVEN
+		Member m1 = new Member();
+		m1.setName("bks");
+		repository.save(m1);
+        QMember qMember = QMember.member;
+
+		JPAQuery query = new JPAQuery(entityManagerFactory.createEntityManager());
+        QueryComment queryComment = new QueryComment("qid").addHint(0, "first hint");
+        query.setHint("org.hibernate.comment", queryCommentService.convertToString(queryComment));
+
+        Member member = query.from(qMember).where(qMember.name.eq("bks")).uniqueResult(qMember);
+    }
+
 	@Test
 	public void jpaQuery(){
 		//GIVEN
@@ -44,10 +65,11 @@ public class MemberRepositoryTest {
 		//WHEN
 		QMember qMember = QMember.member; 
 		JPAQuery query = new JPAQuery(entityManagerFactory.createEntityManager());
-		
+
 		//THEN
 		Member member = query.from(qMember).where(qMember.name.eq("bks")).uniqueResult(qMember);
 		assertThat(member, is(notNullValue()));
+
 	}
 	
 	@Test
