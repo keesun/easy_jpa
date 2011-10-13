@@ -32,7 +32,6 @@ public class MemberRepositoryTest {
 	@Autowired MemberRepository repository;
 	@Autowired MemberQeuryContainer mqc;
 	@Autowired EntityManagerFactory entityManagerFactory;
-    @Autowired SessionFactory sessionFactory;
     @Autowired QueryCommentService queryCommentService;
 	
 	@Before
