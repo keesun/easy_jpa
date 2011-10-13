@@ -13,8 +13,8 @@ public class ProductDetails {
 
     private String details;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    private Product product;
+//    @OneToOne(fetch = FetchType.LAZY, mappedBy = "productDetails", optional = false)
+//    private Product product;
 
     public Long getId() {
         return id;
@@ -32,11 +32,11 @@ public class ProductDetails {
         this.details = details;
     }
 
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
+//    public Product getProduct() {
+//        return product;
+//    }
+//
+//    public void setProduct(Product product) {
+//        this.product = product;
+//    }
 }

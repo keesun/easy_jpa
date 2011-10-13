@@ -1,14 +1,18 @@
 <dataset>
-    <!-- 양방향  -->
+    <!-- 양방향
     <product id="1" price="10.5" name="keesun" />
+
     <productDetails id="1" details="details" product_id="1" />
+
     <productInfo id="1" info="info" product_id="1" />
+     -->
 
 
-    <!-- 단방향
+    <!-- 단방향  -->
     <productDetails id="1" details="details" />
     <productInfo id="1" info="info" />
-    <product id="1" price="10.5" name="keesun" productDetails_id="1"  />
-     -->
+    <product id="1" price="10.5" name="keesun" productDetails_id="1" productInfo_id="1"  />
+
+
 
 </dataset>
