@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:util="http://www.springframework.org/schema/util"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
 		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
 		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
-		http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd"
+		http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:jdbc="http://www.springframework.org/schema/jdbc"
        xmlns:p="http://www.springframework.org/schema/p"
@@ -27,19 +28,39 @@
     <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"/>
     <aop:aspectj-autoproxy />
 
-    <!-- cache setup -->
+    <!-- cache setup
     <bean id="annotationCacheOperationSource" class="org.springframework.cache.annotation.AnnotationCacheOperationSource" />
     <bean id="cacheInterceptor" class="me.whiteship.cache.ChainableCacheInterceptor">
-        <property name="cacheDefinitionSources" ref="annotationCacheOperationSource" />
+        <property name="cacheOperationSource" ref="annotationCacheOperationSource" />
         <property name="cacheManager" ref="cacheManager"/>
+        <property name="keyGenerator" ref="keyGenerator"/>
     </bean>
     <bean id="cacheAdvisor" class="org.springframework.cache.interceptor.BeanFactoryCacheOperationSourceAdvisor">
-        <property name="cacheDefinitionSource" ref="annotationCacheOperationSource" />
+        <property name="cacheOperationSource" ref="annotationCacheOperationSource" />
         <property name="advice" ref="cacheInterceptor" />
     </bean>
+    -->
 
+    <!--
     <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager" p:cacheManager-ref="ehcache" />
     <bean id="ehcache" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean" p:configLocation="ehcache.xml"/>
+    -->
+
+    <cacahe:annotation-driven key-generator="arcusKeyGenerator" cache-manager="arcusCacheManager"/>
+    <bean id="arcusCacheManager" class="org.springframework.cache.support.SimpleCacheManager">
+        <property name="caches">
+            <list>
+                <bean p:name="member" p:prefix="member:" p:timeoutMilliSeconds="500" parent="defaultArcusCache" />
+                <bean p:name="memberList" p:prefix="memberList:" p:expireSeconds="3000"	parent="defaultArcusCache" />
+            </list>
+        </property>
+    </bean>
+    <bean id="arcusKeyGenerator" class="com.nhncorp.arcus.spring.cache.StringKeyGenerator"/>
+    <bean id="defaultArcusCache" class="com.nhncorp.arcus.spring.cache.ArcusCache"
+        p:arcusClient-ref="arcusClient" p:timeoutMilliSeconds="500"
+        p:expireSeconds="3000" abstract="true" />
+    <bean id="arcusClient" class="com.nhncorp.arcus.spring.ArcusClientFactoryBean"
+        p:url="dev.arcuscloud.nhncorp.com:17288" p:serviceCode="dev" />
 
 	<!-- JPA -->
 	<jpa:repositories base-package="me.whiteship" />

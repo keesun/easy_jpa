@@ -7,11 +7,16 @@
 	<packaging>war</packaging>
 
     <properties>
-        <spring.version>3.1.0.M2</spring.version>
+        <spring.version>3.1.0.RC1</spring.version>
     </properties>
 
 
 	<dependencies>
+        <dependency>
+            <groupId>arcus</groupId>
+            <artifactId>arcus-spring</artifactId>
+            <version>0.1</version>
+        </dependency>
         <!-- Servlet -->
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -274,6 +279,11 @@
 			<name>JBoss Public Maven Repository Group</name>
 			<url>https://repository.jboss.org/nexus/content/groups/public/</url>
 		</repository>
+        <repository>
+            <id>nhn</id>
+            <name>NHN Corp Maven Repository</name>
+            <url>http://repo.nhncorp.com/maven2</url>
+        </repository>
 	</repositories>
 
 </project>
