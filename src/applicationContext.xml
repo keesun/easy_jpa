@@ -23,23 +23,34 @@
 
 	<jdbc:embedded-database id="dataSource" type="HSQL" />
 
-    <!-- AOP -->
-    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"/>
-    <aop:aspectj-autoproxy />
+    <!-- Cache -->
+    <cacahe:annotation-driven key-generator="arcusKeyGenerator" cache-manager="arcusCacheManager" />
 
-    <!-- cache setup -->
-    <bean id="annotationCacheOperationSource" class="org.springframework.cache.annotation.AnnotationCacheOperationSource" />
-    <bean id="cacheInterceptor" class="me.whiteship.cache.ChainableCacheInterceptor">
-        <property name="cacheDefinitionSources" ref="annotationCacheOperationSource" />
-        <property name="cacheManager" ref="cacheManager"/>
-    </bean>
-    <bean id="cacheAdvisor" class="org.springframework.cache.interceptor.BeanFactoryCacheOperationSourceAdvisor">
-        <property name="cacheDefinitionSource" ref="annotationCacheOperationSource" />
-        <property name="advice" ref="cacheInterceptor" />
-    </bean>
-
+    <!--
     <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager" p:cacheManager-ref="ehcache" />
     <bean id="ehcache" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean" p:configLocation="ehcache.xml"/>
+-->
+
+
+    <!-- -->
+    <bean id="arcusClient" class="com.nhncorp.arcus.spring.ArcusClientFactoryBean"
+            p:url="dev.arcuscloud.nhncorp.com:17288" p:serviceCode="dev" />
+
+    <bean id="defaultArcusCache" class="com.nhncorp.arcus.spring.cache.ArcusCache"
+            p:arcusClient-ref="arcusClient" p:expireSeconds="500" abstract="true" p:serviceId="dev"/>
+
+    <bean id="arcusCacheManager" class="org.springframework.cache.support.SimpleCacheManager">
+        <property name="caches">
+            <list>
+                <bean parent="defaultArcusCache" p:name="member" p:prefix="member" p:expireSeconds="500" />
+                <bean parent="defaultArcusCache" p:name="memberList" p:prefix="memberList" p:expireSeconds="3000" />
+            </list>
+        </property>
+    </bean>
+
+    <bean id="arcusKeyGenerator" class="com.nhncorp.arcus.spring.cache.StringKeyGenerator"/>
+
+
 
 	<!-- JPA -->
 	<jpa:repositories base-package="me.whiteship" />
