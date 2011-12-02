@@ -7,7 +7,7 @@
 	<packaging>war</packaging>
 
     <properties>
-        <spring.version>3.1.0.RC1</spring.version>
+        <spring.version>3.1.0.RC2</spring.version>
     </properties>
 
 	<dependencies>
@@ -15,7 +15,7 @@
         <dependency>
             <groupId>arcus</groupId>
             <artifactId>arcus-spring</artifactId>
-            <version>0.2.1</version>
+            <version>0.2.2</version>
         </dependency>
         <dependency>
             <groupId>arcus</groupId>
