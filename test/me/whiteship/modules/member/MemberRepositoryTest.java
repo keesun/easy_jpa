@@ -32,27 +32,12 @@ public class MemberRepositoryTest {
 	@Autowired MemberRepository repository;
 	@Autowired MemberQeuryContainer mqc;
 	@Autowired EntityManagerFactory entityManagerFactory;
-    @Autowired QueryCommentService queryCommentService;
-	
+
 	@Before
 	public void setUp(){
 		repository.deleteAll();
 	}
 
-    @Test
-    public void queryHint(){
-        //GIVEN
-		Member m1 = new Member();
-		m1.setName("bks");
-		repository.save(m1);
-        QMember qMember = QMember.member;
-
-		JPAQuery query = new JPAQuery(entityManagerFactory.createEntityManager());
-        QueryComment queryComment = new QueryComment("qid").addHint(0, "first hint");
-        query.setHint("org.hibernate.comment", queryCommentService.convertToString(queryComment));
-
-        Member member = query.from(qMember).where(qMember.name.eq("bks")).uniqueResult(qMember);
-    }
 
 	@Test
 	public void jpaQuery(){
@@ -68,7 +53,6 @@ public class MemberRepositoryTest {
 		//THEN
 		Member member = query.from(qMember).where(qMember.name.eq("bks")).uniqueResult(qMember);
 		assertThat(member, is(notNullValue()));
-
 	}
 	
 	@Test
@@ -96,17 +80,21 @@ public class MemberRepositoryTest {
 		Member m1 = new Member();
 		m1.setName("bks");
 		repository.save(m1);
-		String keyword = "ks";
-		
+
 		//WHEN
-		List<Member> memberList = repository.findByNameLike("%"+keyword+"%");
+		List<Member> memberList = repository.findByNameLike("%ks%");
 		//THEN
 		assertThat(memberList.size(), is(1));
 		
 		//WHEN
-		memberList = repository.findByName(keyword);
+		memberList = repository.findByName("ks");
 		//THEN
 		assertThat(memberList.size(), is(0));
+
+        //WHEN
+		memberList = repository.findByName("bks");
+		//THEN
+		assertThat(memberList.size(), is(1));
 	}
 
 }

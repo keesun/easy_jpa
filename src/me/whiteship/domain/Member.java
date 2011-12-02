@@ -7,7 +7,7 @@ import java.util.List;
 
 
 @Entity
-public class Member implements Serializable{
+public class Member implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

@@ -30,11 +30,6 @@ public class MemberServiceImplTest {
 
 	@Test
 	public void getMemberCache(){
-//        for(String name : context.getBeanDefinitionNames()) {
-//            System.out.println("=======================");
-//            System.out.println(context.getBean(name));
-//        }
-
         Cache memberCache = cacheManager.getCache("member");
 
         Member me = new Member();
