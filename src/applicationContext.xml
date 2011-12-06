@@ -14,7 +14,7 @@
        xmlns:cacahe="http://www.springframework.org/schema/cache"
        xmlns:aop="http://www.springframework.org/schema/aop">
 
-	<context:component-scan base-package="me.whiteship" />
+	<context:component-scan base-package="usecase, me.whiteship" />
 
 	<!-- JDBC & Transaction -->
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
@@ -27,7 +27,8 @@
     <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"/>
     <aop:aspectj-autoproxy />
 
-    <!-- cache setup -->
+<!--
+     cache setup
     <bean id="annotationCacheOperationSource" class="org.springframework.cache.annotation.AnnotationCacheOperationSource" />
     <bean id="cacheInterceptor" class="me.whiteship.cache.ChainableCacheInterceptor">
         <property name="cacheDefinitionSources" ref="annotationCacheOperationSource" />
@@ -40,10 +41,11 @@
 
     <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager" p:cacheManager-ref="ehcache" />
     <bean id="ehcache" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean" p:configLocation="ehcache.xml"/>
+-->
 
 	<!-- JPA -->
 	<jpa:repositories base-package="me.whiteship" />
-	<jpa:repositories base-package="usecase" />
+    <jpa:repositories base-package="usecase" />
 
 	<bean id="entityManagerFactory"
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
@@ -58,17 +60,11 @@
 				<prop key="hibernate.show_sql">true</prop>
 				<prop key="hibernate.format_sql">true</prop>
 				<prop key="hibernate.generate_statistics">true</prop>
-                <prop key="hibernate.bytecode.provider">cglib</prop>
-                <prop key="hibernate.use_sql_comments">true</prop>
+                <prop key="hibernate.cache.use_second_level_cache">true</prop>
+                <prop key="hibernate.cache.use_query_cache">true</prop>
+                <prop key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</prop>
 			</props>
 		</property>
 	</bean>
-
-    <!-- ============================================================= -->
-	<!--  JacksonJSON                                                  -->
-	<!-- ============================================================= -->
-	<bean class="org.codehaus.jackson.map.ObjectMapper"/>
-
-	<bean class="me.whiteship.common.jpa.comment.service.DefaultQeuryCommentService"/>
 
 </beans>

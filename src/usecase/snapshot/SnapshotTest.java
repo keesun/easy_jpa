@@ -1,30 +1,35 @@
 package usecase.snapshot;
 
 import org.dbunit.DatabaseUnitException;
-import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.DatabaseDataSourceConnection;
 import org.dbunit.database.IDatabaseConnection;
-import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
-import org.dbunit.dataset.xml.FlatXmlDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.operation.DatabaseOperation;
-import org.hamcrest.CoreMatchers;
 import org.junit.Test;
+
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StopWatch;
+import usecase.snapshot.domain.Category;
 import usecase.snapshot.domain.Product;
-import usecase.snapshot.repository.ProductRepository;
 
+import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import javax.sql.DataSource;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -49,14 +54,19 @@ import static org.junit.Assert.assertThat;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("/applicationContext.xml")
-@Transactional
 public class SnapshotTest {
 
     @Autowired ProductRepository productRepository;
+    @Autowired CategoryRepository categoryRepository;
     @Autowired DataSource dataSource;
+    @Autowired ProductService service;
+
+    @Autowired EntityManagerFactory entityManagerFactory;
+
+    @PersistenceContext EntityManager entityManager;
 
     @Test
-    public void di() throws SQLException, IOException, DatabaseUnitException {
+    public void lazyLoading() throws SQLException, IOException, DatabaseUnitException {
         //INSERT Test Data
         assertThat(productRepository, is(notNullValue()));
         IDatabaseConnection connection = new DatabaseDataSourceConnection(dataSource);
@@ -79,6 +89,51 @@ public class SnapshotTest {
 
         System.out.println("========LAZY LOADING...(ProductInfo)=========");
         product.getProductInfo().getInfo();
+    }
+
+    @Test
+    public void secondLevelCache(){
+        StopWatch stopWatch = new StopWatch();
+        service.insertTestData();
+
+//         List<Category> categoryList = categoryRepository.findAll();
+
+        CriteriaBuilder queryBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery criteriaQuery = queryBuilder.createQuery();
+        Root<Category> from = criteriaQuery.from(Category.class);
+        CriteriaQuery<Category> select = criteriaQuery.select(from);
+        TypedQuery<Category> typedQuery = entityManager.createQuery(select);
+        List<Category> categoryList = typedQuery.getResultList();
+
+        printCache(categoryList);
+
+        for(int i = 0 ; i < 5 ; i++) {
+            stopWatch.start("read all <" + i + ">");
+            List<Product> productList = productRepository.findAll();
+
+            for(Product p : productList) {
+                //Lazy Loading
+                Category category = p.getCategory();
+                category.getName();
+
+                p.getExceptionalCategory().getName();
+            }
+            stopWatch.stop();
+        }
+
+        System.out.println("=====================");
+        System.out.println(stopWatch.prettyPrint());
+
+        printCache(categoryList);
+
+    }
+
+    private void printCache(List<Category> categoryList) {
+        System.out.println("---------------------");
+        Cache cache = entityManager.getEntityManagerFactory().getCache();
+        for(Category c : categoryList) {
+            System.out.println(cache.contains(Category.class, c));
+        }
     }
 
 }

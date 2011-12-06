@@ -1,5 +1,6 @@
 package usecase.snapshot.domain;
 
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.LazyToOne;
 import org.hibernate.annotations.LazyToOneOption;
 
@@ -18,12 +19,18 @@ public class Product {
     private String name;
 
     @OneToOne(fetch = FetchType.LAZY, optional = true)
-    @LazyToOne(LazyToOneOption.NO_PROXY)
     private ProductDetails productDetails;
 
     @OneToOne(fetch = FetchType.LAZY, optional = true)
-    @LazyToOne(LazyToOneOption.NO_PROXY)
     private ProductInfo productInfo;
+
+    @ManyToOne
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "category")
+    private Category category;
+
+    @ManyToOne
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "category")
+    private Category exceptionalCategory;
 
     public Long getId() {
         return id;
@@ -63,5 +70,21 @@ public class Product {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public Category getExceptionalCategory() {
+        return exceptionalCategory;
+    }
+
+    public void setExceptionalCategory(Category exceptionalCategory) {
+        this.exceptionalCategory = exceptionalCategory;
     }
 }

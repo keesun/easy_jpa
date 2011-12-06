@@ -1,4 +1,4 @@
-package usecase.snapshot.repository;
+package usecase.snapshot;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import usecase.snapshot.domain.Product;

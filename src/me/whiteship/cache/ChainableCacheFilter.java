@@ -10,6 +10,7 @@ public interface ChainableCacheFilter {
      * @return 캐시 인터셉터 사용을 중단하고 싶다면, true. 계속해서 캐시 인터셉터와 필터를 적용하고 싶다면 false.
      * @param invocation @see(org.aopalliance.intercept.MethodInvocation)
      */
+
     boolean wantToUseTheTargetMethod(MethodInvocation invocation);
 
     /**
