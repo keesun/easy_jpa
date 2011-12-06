@@ -19,7 +19,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class BookRepositoryTest {
 	
 	@Autowired BookRepository repository;
-	
+
 	@Test
 	public void di(){
 		assertThat(repository, is(notNullValue()));

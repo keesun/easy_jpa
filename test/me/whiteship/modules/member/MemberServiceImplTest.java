@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
+import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -26,14 +27,9 @@ public class MemberServiceImplTest {
 	@Autowired MemberService service;
     @Autowired CacheManager cacheManager;
     @Autowired ApplicationContext context;
-	
+
 	@Test
 	public void getMemberCache(){
-//        for(String name : context.getBeanDefinitionNames()) {
-//            System.out.println("=======================");
-//            System.out.println(context.getBean(name));
-//        }
-
         Cache memberCache = cacheManager.getCache("member");
 
         Member me = new Member();
@@ -41,7 +37,7 @@ public class MemberServiceImplTest {
         service.addMember(me);
 
 		service.getAMember(me.getId());
-		assertThat(memberCache.get(me.getId()), is(notNullValue()));
+        assertThat(memberCache.get(me.getId()), is(notNullValue()));
 		service.getAMember(me.getId());
         service.getAMember(me.getId());
 
