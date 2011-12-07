@@ -15,7 +15,6 @@ public class ProductController {
 
     @RequestMapping("/")
     public String home(Model model) {
-        model.addAttribute("prdList", service.getAll());
         return "/product";
     }
 
@@ -30,4 +29,37 @@ public class ProductController {
         service.evictCacheData();
         return "redirect:/";
     }
+
+    @RequestMapping("/evictall")
+    public String evictAllCache(){
+        service.evictAllCache();
+        return "redirect:/";
+    }
+
+    @RequestMapping("/product/with/all")
+    public String productWithAll(Model model){
+        model.addAttribute("prdList", service.getAll());
+        return "/productWithAll";
+    }
+
+    @RequestMapping("/product/with/detail")
+    public String productWithDetail(Model model){
+        model.addAttribute("prdList", service.getAll());
+        return "/productAndDetail";
+    }
+
+    @RequestMapping("/category")
+    public String category(Model model){
+        model.addAttribute("categoryList", service.getAllCategory());
+        return "redirect:/";
+    }
+
+    @RequestMapping("/product/with/category")
+    public String productWithCategory(Model model){
+        model.addAttribute("prdList", service.getAll());
+        return "/productWithCategory";
+    }
+
+
+
 }

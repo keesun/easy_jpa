@@ -5,10 +5,11 @@ import org.hibernate.annotations.LazyToOne;
 import org.hibernate.annotations.LazyToOneOption;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Entity
-public class Product {
+public class Product implements Serializable{
 
     @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,12 +25,10 @@ public class Product {
     @OneToOne(fetch = FetchType.LAZY, optional = true)
     private ProductInfo productInfo;
 
-    @ManyToOne
-    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "category")
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
     private Category category;
 
-    @ManyToOne
-    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "category")
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
     private Category exceptionalCategory;
 
     public Long getId() {

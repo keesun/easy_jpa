@@ -53,33 +53,33 @@ public class ProductService {
             product.setName("Book" + i);
             product.setCategory(categoryRepository.findOne(categoryIdList.get((int) (Math.random() * CATEGORY_COUNT))));
             product.setExceptionalCategory(categoryRepository.findOne(categoryIdList.get((int) (Math.random() * CATEGORY_COUNT))));
-            repository.save(product);
-            prdIdList.add(product.getId());
-        }
 
-/*        for(int i = 0 ; i < PRODUCT_COUNT ; i++) {
             ProductDetails productDetails = new ProductDetails();
             productDetails.setDetails("Detail" + i);
             productDetailsRepository.save(productDetails);
-
-            Long pId = prdIdList.get((int) (Math.random() * PRODUCT_COUNT));
-            Product product = repository.findOne(pId);
             product.setProductDetails(productDetails);
-            repository.save(product);
 
             ProductInfo productInfo = new ProductInfo();
             productInfo.setInfo("Info" + i);
             productInfoRepository.save(productInfo);
-
-            pId = prdIdList.get((int) (Math.random() * PRODUCT_COUNT));
-            product = repository.findOne(pId);
             product.setProductInfo(productInfo);
+
             repository.save(product);
-        } */
+            prdIdList.add(product.getId());
+        }
+
     }
 
     @Transactional
     public void evictCacheData() {
         entityManagerFactory.getCache().evict(Category.class);
+    }
+
+    public void evictAllCache() {
+        entityManagerFactory.getCache().evictAll();
+    }
+
+    public List<Category> getAllCategory() {
+        return categoryRepository.findAll();
     }
 }

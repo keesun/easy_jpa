@@ -17,5 +17,11 @@
     <li><a href="/product/with/detail">Load all product with only productDetails</a></li>
     <li><a href="/product/with/category">Load all product with only categrories</a></li>
 </ul>
+
+<h3>Products</h3>
+<c:forEach items="${prdList}" var="p">
+  <li>${p.name} | ${p.category.name} | ${p.exceptionalCategory.name} </li>
+</c:forEach>
+
 </body>
 </html>

@@ -32,5 +32,12 @@
 		overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="0"
 		timeToLiveSeconds="20" memoryStoreEvictionPolicy="LRU" />
 
+    <cache name="details" eternal="false" maxElementsInMemory="100"
+		overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="0"
+		timeToLiveSeconds="20" memoryStoreEvictionPolicy="LRU" />
+
+    <cache name="infos" eternal="false" maxElementsInMemory="100"
+		overflowToDisk="false" diskPersistent="false" timeToIdleSeconds="0"
+		timeToLiveSeconds="20" memoryStoreEvictionPolicy="LRU" />
 
 </ehcache>

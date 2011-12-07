@@ -1,11 +1,15 @@
 package usecase.snapshot.domain;
 
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
-public class ProductDetails {
+@Cacheable
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "details")
+public class ProductDetails implements Serializable {
 
     @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

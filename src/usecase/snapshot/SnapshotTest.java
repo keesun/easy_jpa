@@ -6,6 +6,7 @@ import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.operation.DatabaseOperation;
+import org.hibernate.Session;
 import org.junit.Test;
 
 import org.junit.runner.RunWith;
@@ -96,17 +97,8 @@ public class SnapshotTest {
         StopWatch stopWatch = new StopWatch();
         service.insertTestData();
 
-//         List<Category> categoryList = categoryRepository.findAll();
-
-        CriteriaBuilder queryBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery criteriaQuery = queryBuilder.createQuery();
-        Root<Category> from = criteriaQuery.from(Category.class);
-        CriteriaQuery<Category> select = criteriaQuery.select(from);
-        TypedQuery<Category> typedQuery = entityManager.createQuery(select);
-        List<Category> categoryList = typedQuery.getResultList();
-
-        printCache(categoryList);
-
+        List<Category> categoryList = categoryRepository.findAll();
+//        printCache(categoryList);
         for(int i = 0 ; i < 5 ; i++) {
             stopWatch.start("read all <" + i + ">");
             List<Product> productList = productRepository.findAll();
@@ -124,7 +116,7 @@ public class SnapshotTest {
         System.out.println("=====================");
         System.out.println(stopWatch.prettyPrint());
 
-        printCache(categoryList);
+//        printCache(categoryList);
 
     }
 
